@@ -1,0 +1,11 @@
+[flake8]
+exclude = 
+    .git
+    */settings.py
+    */migrations/*
+
+; extend-ignore = 
+;     E24
+;     W504
+;     W503
+;     E126
