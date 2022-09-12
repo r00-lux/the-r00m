@@ -19,28 +19,16 @@ WORKDIR /app
 # on the host to 8000 on the container.
 EXPOSE 8000
 
-# Setup a venv to prevent conflicts with the base image.
-RUN python -m venv /py
-
-# Update pip
-RUN /py/bin/pip install --upgrade pip
-
-# # Install Postgres requirements and temporary build requirements.
-RUN apk add --update --no-cache postgresql-client
-RUN apk add --update --no-cache --virtual .tmp-build-deps build-base \
-    postgresql-dev musl-dev
-
-# Install Python dependencies.
-RUN /py/bin/pip install -r /tmp/requirements.txt
-
-# Cleanup temp directory. These files are not needed after installation.
-RUN rm -rf /tmp
-
-# Uninstall the temporary build deps.
-RUN apk del .tmp-build-deps
-
-# Setup a new user.
-RUN adduser --disabled-password --no-create-home django-user
+# Setup a venv and install the necessary requirements.
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps build-base postgresql-dev musl-dev && \
+    /py/bin/pip install -r /tmp/requirements.txt && \
+    rm -rf /tmp && \
+    apk del .tmp-build-deps && \
+    rm -rf /var/lib/apt/lists/* && \
+    adduser --disabled-password --no-create-home django-user
 
 ENV PATH="/py/bin:$PATH"
 
