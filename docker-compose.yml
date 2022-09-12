@@ -24,6 +24,8 @@ services:
     image: postgres:14.5-alpine
     volumes:
       - app-db:/var/lib/postgresql/data
+    env_file:
+      - ./.env
     environment:
       - POSTGRES_DB=db
       - POSTGRES_USER=${{ secrets.DB_USER }}
