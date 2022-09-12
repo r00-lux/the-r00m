@@ -1,7 +1,13 @@
 ---
 name: Checks
 
-on: [push]
+on: 
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches:    
+      - main
 
 jobs:
   test-lint:
@@ -16,12 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        with:
-          db_pass: ${{ secrets.DB_PASS}}
-          db_user: ${{ secrets.DB_USER}}
         run: docker compose run --rm app sh -c "python manage.py test"
       - name: Lint
-        with: 
-          db_pass: ${{ secrets.DB_PASS}}
-          db_user: ${{ secrets.DB_USER}}
         run: docker compose run --rm app sh -c "flake8"
