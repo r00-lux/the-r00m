@@ -17,11 +17,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Test
         with:
-          DB_PASS: ${{ secrets.DB_PASS}}
-          DB_USER: ${{ secrets.DB_USER}}
+          db_pass: ${{ secrets.DB_PASS}}
+          db_user: ${{ secrets.DB_USER}}
         run: docker compose run --rm app sh -c "python manage.py test"
       - name: Lint
         with: 
-          DB_PASS: ${{ secrets.DB_PASS}}
-          DB_USER: ${{ secrets.DB_USER}}
+          db_pass: ${{ secrets.DB_PASS}}
+          db_user: ${{ secrets.DB_USER}}
         run: docker compose run --rm app sh -c "flake8"
