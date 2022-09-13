@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import Client
 
+from rest_framework.test import APIClient
+from rest_framework import status
+
 
 class UserTests(TestCase):
     """Tests for users."""
@@ -86,3 +89,56 @@ class TestUserAdmin(TestCase):
         result = self.client.get(url)
 
         self.assertEqual(result.status_code, 200)
+
+
+class PublicUserAPITests(TestCase):
+    """Test public user APIs."""
+    def setUp(self):
+        self.CREATE_USER_URL = reverse('users:create')
+        self.client = APIClient()
+
+    def create_user(self, **params):
+        """Helper to create a new user."""
+        return get_user_model().objects.create_user(**params)
+
+    def test_create_user(self):
+        """Test creating a user."""
+        payload = {
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password': 'password',
+            'name': 'Chuck Tester'
+        }
+
+        result = self.client.post(self.CREATE_USER_URL, payload)
+
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        user = get_user_model().objects.get(email=payload.get('email'))
+        self.assertTrue(user.check_password(payload.get('password')))
+        self.assertNotIn('password', result.data)
+
+    def test_create_user_email_exists(self):
+        """Test creating user with existing email fails."""
+        payload = {
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password': 'password'
+        }
+        self.create_user(**payload)
+
+        result = self.client.post(self.CREATE_USER_URL, payload)
+        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_short_password(self):
+        """Test creating user fails when using short password."""
+        payload = {
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password': 'pw'
+        }
+
+        result = self.client.post(self.CREATE_USER_URL, payload)
+        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
+        user_exists = get_user_model().objects.filter(
+            email=payload.get('email')).exists()
+        self.assertFalse(user_exists)
