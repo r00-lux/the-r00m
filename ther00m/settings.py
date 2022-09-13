@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['0.0.0.0']
 INSTALLED_APPS = [
     'django.contrib.admin', 'django.contrib.auth',
     'django.contrib.contenttypes', 'django.contrib.sessions',
-    'django.contrib.messages', 'django.contrib.staticfiles', 'profiles',
+    'django.contrib.messages', 'django.contrib.staticfiles', 'users',
     'rest_framework', 'rest_framework.authtoken'
 ]
 
@@ -124,4 +124,4 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'profiles.Profile'
+AUTH_USER_MODEL = 'users.User'
