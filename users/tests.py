@@ -111,7 +111,6 @@ class PublicUserAPITests(TestCase):
         }
 
         result = self.client.post(self.CREATE_USER_URL, payload)
-        print(result.data)
 
         self.assertEqual(result.status_code, status.HTTP_201_CREATED)
         user = get_user_model().objects.get(email=payload.get('email'))
