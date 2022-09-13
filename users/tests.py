@@ -2,19 +2,21 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 
-class ProfileTests(TestCase):
+class UserTests(TestCase):
     """Tests for users."""
-    def test_create_user__success(self):
-        """Test creating a new profile."""
-        username = 'plague'
-        email = 'plague@example.com'
-        password = 'godsexlovesecret'
-        user = get_user_model().objects.create_user(username=username,
-                                                    email=email,
-                                                    password=password)
+    def setUp(self):
+        self.username = 'plague'
+        self.email = 'plague@example.com'
+        self.password = 'godsexlovesecret'
 
-        self.assertEqual(user.username, username)
-        self.assertTrue(user.check_password(password))
+    def test_create_user__success(self):
+        """Test creating a new user."""
+        user = get_user_model().objects.create_user(username=self.username,
+                                                    email=self.email,
+                                                    password=self.password)
+
+        self.assertEqual(user.username, self.username)
+        self.assertTrue(user.check_password(self.password))
 
     def test_create_user_email_normalized(self):
         """Test email is normalized for new users."""
@@ -25,6 +27,25 @@ class ProfileTests(TestCase):
 
         for username, email, expected_email in emails:
             user = get_user_model().objects.create_user(
-                username, email, 'godsexlovesecret')
+                username, email, self.password)
 
             self.assertEqual(user.email, expected_email)
+
+    def test_create_user_no_email(self):
+        """Test creating user without an email raises a ValueError."""
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user(self.username, '',
+                                                 self.password)
+
+    def test_create_user_no_username(self):
+        """Test creating user without a username raises a ValueError."""
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user('', self.email, self.password)
+
+    def test_create_superuser(self):
+        """Test creating a superuser."""
+        user = get_user_model().objects.create_superuser(
+            self.username, self.email, self.password)
+
+        self.assertTrue(user.is_superuser)
+        self.assertTrue(user.is_staff)
