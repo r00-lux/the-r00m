@@ -14,8 +14,8 @@ services:
     environment:
       - DB_HOST=db
       - DB_NAME=db
-      - DB_USER=${{ secrets.DB_USER }}
-      - DB_PASS=${{ secrets.DB_PASS }}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
     depends_on:
       - db
 
@@ -28,8 +28,8 @@ services:
       - ./.env
     environment:
       - POSTGRES_DB=db
-      - POSTGRES_USER=${{ secrets.DB_USER }}
-      - POSTGRES_PASSWORD=${{ secrets. DB_PASS }}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
 
 volumes:
   app-db:
