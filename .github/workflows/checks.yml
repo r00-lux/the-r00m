@@ -26,6 +26,8 @@ jobs:
     name: Test
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
       - name: Test
         env:
           DB_USER: mr_anderson
