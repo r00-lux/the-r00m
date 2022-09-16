@@ -22,3 +22,12 @@ jobs:
         uses: actions/checkout@v3
       - name: flake8
         run: docker compose run --rm app sh -c "flake8"
+  test:
+    name: Test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Test
+        env:
+          DB_USER: mr_anderson
+          DB_PASS: redpillbluepill
+        run: docker compose run --rm app sh -c "python manage.py test"
