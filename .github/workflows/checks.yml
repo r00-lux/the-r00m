@@ -20,3 +20,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+  lint:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: flake8
+        run: docker compose run --rm app sh -c "flake8"
