@@ -24,5 +24,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
       - name: flake8
         run: docker compose run --rm app sh -c "flake8"
