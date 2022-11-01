@@ -3,9 +3,6 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.test import Client
 
-from rest_framework.test import APIClient
-from rest_framework import status
-
 
 class UserTests(TestCase):
     """Tests for users."""
