@@ -141,7 +141,7 @@ class PrivateUserAPITests(TestCase):
             })
 
     def test_post_me_not_allowed(self):
-        """Test POST is not allowed for ME endpoint. POST should only be used 
+        """Test POST is not allowed for ME endpoint. POST should only be used
         when creating objects. This object will already exist.
         """
         res = self.client.post(ME_URL, {})
